@@ -1,19 +1,56 @@
 import json
 import requests
 
+from typing import List
 
-payload = json.dumps({
-    "collection": "tech_roles",
-    "database": "superblocks",
-    "dataSource": "Cluster0",
-    "projection": {
-        "_id": 1
+from .base import DATA_API_BASE_URL, headers
+
+
+def get_tech_roles():
+    """
+    Gets all of the tech roles in the db
+    """
+
+    url = f'{DATA_API_BASE_URL}/find'
+
+    request_body = {
+        "dataSource": "Cluster0",
+        "database": "superblocks",
+        "collection": "tech_roles",
+        "projection": {
+            "_id": 0,
+            "role_name": 1
+        },
+        "sort": {
+            "role_name": 1
+        }
     }
-})
-headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Request-Headers': '*',
-  'api-key': "FOO"
-}
 
-response = requests.request("POST", url, headers=headers, data=payload)
+    payload = json.dumps(request_body)
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    if response.status_code != 200:
+        raise ValueError("Did not get good response back")
+
+    data = response.json()
+    records: List[dict] = data['documents']
+    role_names: List[str] = [x["role_name"] for x in records if x["role_name"]]
+
+    # Some fun stuff
+    longest_name = max(role_names, key=len)
+    shortest_name = min(role_names, key=len)
+
+    # Otherwise
+    return {
+        "nice_message": f"There are {len(role_names):,} distinct tech role names",
+        "n_roles": len(role_names),
+        "role_names": role_names,
+        "shortest_name": {
+            "n_chars": len(shortest_name),
+            "role_name": shortest_name
+        },
+        "longest_name": {
+            "n_chars": len(longest_name),
+            "role_name": longest_name
+        }
+    }
