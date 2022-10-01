@@ -15,7 +15,7 @@ app = FastAPI()
 
 
 @app.get("/")
-def hello():
+def hello() -> str:
     """Entry point to the API"""
     secret_value = os.environ.get('SECRET_VALUE', 'not set')
     return f"Hello from Railway. {secret_value=}"
@@ -30,7 +30,7 @@ def hello_fun(
             le=100,
             description="Choose how many times you want your name repeated!"
             )
-        ):
+        ) -> str:
     """
     A fun way to say hello
     """
@@ -52,7 +52,7 @@ def hello_fun(
 
 
 @app.get("/data/summary")
-def superblocks_db_summary():
+def superblocks_db_summary() -> dict:
     """
     Returns a summary of the superblocks database.
     The one being used in the Artists Who Code thingy.[1]
