@@ -86,8 +86,17 @@ uvicorn main:app --host 0.0.0.0 --port $PORT
 7. Within your project's settings, under `Environment`, under `Domains`
 select `⚡️ Generate Domain`. This will autogenerate a domain
 for your app. Give it a minute.
+
 8. Try visiting your app's endpoint. If it works, you are done.
 If it doesn't work, check the logs and debug.
+
+9. Bonus, configure railway to create deployments only when relevant files
+are changed. Settings, under `Build` >> `Watch Paths` update to the following:
+```
+# Ignore all Markdown files
+**
+!/*.md
+```
 
 ## Connect your app to a github repo for continous deployment
 This is a nice feature.
