@@ -8,8 +8,10 @@ import os
 from fastapi import FastAPI, Query
 
 import config  # Loads env variables
-from db import base, query_mongo
+import config_pydantic  # Loads global pydantic behavior
 
+from db import base, query_mongo
+from response_models import TechRolesSummary
 
 app = FastAPI()
 
@@ -51,8 +53,8 @@ def hello_fun(
         return ', '.join(result)
 
 
-@app.get("/data/summary")
-def superblocks_db_summary() -> dict:
+@app.get("/data/summary", response_model=TechRolesSummary)
+def superblocks_db_summary() -> TechRolesSummary:
     """
     Returns a summary of the superblocks database.
     The one being used in the Artists Who Code thingy.[1]

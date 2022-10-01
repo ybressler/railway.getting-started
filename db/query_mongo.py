@@ -3,10 +3,11 @@ import requests
 
 from typing import List
 
+from response_models import TechRolesSummary, NameLength
 from .base import DATA_API_BASE_URL, headers
 
 
-def get_tech_roles() -> dict:
+def get_tech_roles() -> TechRolesSummary:
     """
     Gets all of the tech roles in the db
     """
@@ -46,16 +47,16 @@ def get_tech_roles() -> dict:
     shortest_name = min(role_names, key=len)
 
     # Otherwise
-    return {
-        "nice_message": f"There are {len(role_names):,} distinct tech role names",
-        "n_roles": len(role_names),
-        "role_names": role_names,
-        "shortest_name": {
-            "n_chars": len(shortest_name),
-            "role_name": shortest_name
-        },
-        "longest_name": {
-            "n_chars": len(longest_name),
-            "role_name": longest_name
-        }
-    }
+    return TechRolesSummary(
+        nice_message=f"There are {len(role_names):,} distinct tech role names",
+        n_roles=len(role_names),
+        role_names=role_names,
+        shortest_name=NameLength(
+            n_chars=len(shortest_name),
+            role_name=shortest_name
+            ),
+        longest_name=NameLength(
+            n_chars=len(longest_name),
+            role_name=shortest_name
+            )
+        )
