@@ -11,6 +11,3 @@ venv
 
 # Ignore secret! (if they exist)
 secrets
-
-# Ignore deta state
-.deta/

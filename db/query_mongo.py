@@ -6,10 +6,15 @@ from typing import List
 from .base import DATA_API_BASE_URL, headers
 
 
-def get_tech_roles():
+def get_tech_roles() -> dict:
     """
     Gets all of the tech roles in the db
     """
+
+    if not DATA_API_BASE_URL:
+        return {
+            "msg": "Environment is not set up to connect with Mongo Atlas"
+        }
 
     url = f'{DATA_API_BASE_URL}/find'
 
